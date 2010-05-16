@@ -74,9 +74,11 @@ import Control.Arrow (first)
 -- stored in an Olson timezone file).
 data TimeZoneSeries =
        TimeZoneSeries
-         TimeZone     -- ^ The default timezone state
-         [(UTCTime,   -- ^ The time of a change of clocks
-           TimeZone)] -- ^ The new timezone state after the change
+         TimeZone
+         [(UTCTime, TimeZone)]
+                               -- ^ The default timezone state, and a list
+                               -- of pairs of the time of a change of clocks
+                               -- and the new timezone state after the change
   deriving (Eq, Ord)
 
 instance Typeable TimeZoneSeries where
