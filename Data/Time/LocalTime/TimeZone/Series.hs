@@ -10,10 +10,10 @@
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
 
-{- Copyright (c) 2010 Yitzchak Gale. All rights reserved.  For
-licensing information, see the BSD3-style license in the file LICENSE
-that was originally distributed by the author together with this file.
--}
+{- Copyright (c) 2010 Yitzchak Gale. All rights reserved.
+For licensing information, see the BSD3-style license in the file
+LICENSE that was originally distributed by the author together with
+this file. -}
 
 module Data.Time.LocalTime.TimeZone.Series
 (
