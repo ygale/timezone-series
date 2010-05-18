@@ -73,12 +73,14 @@ import Control.Arrow (first)
 -- earlist (note that this is the opposite of the way that they are
 -- stored in an Olson timezone file).
 data TimeZoneSeries =
-       TimeZoneSeries
-         TimeZone
-         [(UTCTime, TimeZone)]
-                               -- ^ The default timezone state, and a list
-                               -- of pairs of the time of a change of clocks
-                               -- and the new timezone state after the change
+       TimeZoneSeries {
+         tzsTimeZone ::    TimeZone,
+                             -- ^ The default timezone state
+         tzsTransitions :: [(UTCTime, TimeZone)]
+                             -- ^ A list of pairs of the time of a
+                             -- change of clocks and the new timezone
+                             -- state after the change
+    }
   deriving (Eq, Ord)
 
 instance Typeable TimeZoneSeries where
