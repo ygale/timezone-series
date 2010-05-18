@@ -58,10 +58,10 @@ import Control.Arrow (first)
 -- for the local timezone and for many other timezones of the world.
 -- On MS Windows systems, this information can be read from the
 -- registry. On other systems, this information is typically provided
--- in the form of Olson timezone files, /etc/localtime (or some other
--- file) for the local timezone and files located in
--- /usr/share/zoneinfo/ or /etc/zoneinfo (or some other directory) for
--- other timezones.
+-- in the form of Olson timezone files, \/etc\/localtime (or some
+-- other file) for the local timezone and files located in
+-- \/usr\/share\/zoneinfo\/ or \/etc\/zoneinfo\/ (or some other
+-- directory) for other timezones.
 
 -- | A @TimeZoneSeries@ consists of a default @TimeZone@ object and a
 -- sequence of pairs of a @UTCTime@ and a @TimeZone@ object. Each
