@@ -1,6 +1,6 @@
 timezone-series version 0.1.0
 
-This package provides Data.Time, from the time package, with several
+This package endows Data.Time, from the time package, with several
 additional data types for enhanced processing of timezones.
 
 A TimeZoneSeries represents a timezone. It describes the timezone with
