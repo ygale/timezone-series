@@ -49,8 +49,8 @@ import Data.Typeable (mkTyCon, mkTyConApp, Typeable(typeOf))
 import Control.Arrow (first)
 
 -- $abouttzs
--- A @TimeZoneSeries@ describes a timezone with a set of @TimeZone@
--- objects. Each @TimeZone@ object describes the clocks in the
+-- A @TimeZoneSeries@ describes a timezone with a set of 'TimeZone'
+-- objects. Each @TimeZone@ object describes the clock setting in the
 -- timezone for a specific period of history during which the clocks
 -- do not change.
 --
@@ -58,8 +58,8 @@ import Control.Arrow (first)
 -- for the local timezone and for many other timezones of the world.
 -- On MS Windows systems, this information can be read from the
 -- registry. On other systems, this information is typically provided
--- in the form of Olson timezone files, \/etc\/localtime (or some
--- other file) for the local timezone and files located in
+-- in the form of Olson timezone files: \/etc\/localtime (or some
+-- other file) for the local timezone, and files located in
 -- \/usr\/share\/zoneinfo\/ or \/etc\/zoneinfo\/ (or some other
 -- directory) for other timezones.
 
@@ -204,17 +204,18 @@ localTimeToZoneSeriesTime :: TimeZoneSeries -> LocalTime -> ZoneSeriesTime
 localTimeToZoneSeriesTime tzs lt = ZoneSeriesTime (localTimeToUTC' tzs lt) tzs
 
 -- $aboutfuncs
--- The following functions are variants on functions in "Data.Time.LocalTime"
--- that convert between UTC and local time. The originals can give the
--- wrong result if the 'TimeZone' used for the conversion is not actually
--- in effect at the specified time. These variants use a 'TimeZoneSeries'
--- instead of a 'TimeZone', so they are always correct.
+-- The following functions are variants on functions in
+-- "Data.Time.LocalTime" that convert between UTC and local time. The
+-- originals can give a wrong result if the 'TimeZone' used for the
+-- conversion is not actually in effect at the specified time. These
+-- variants use a 'TimeZoneSeries' instead of a 'TimeZone'.
 --
--- When converting from an invalid local time, the local time is interpreted
--- as if the time change that made it invalid never happened.
--- When converting from a redundant local time, the latest possible
--- interpretation is used. Use the functions 'isValidLocalTime' and
--- 'isRedundantLocalTime' to detect these conditions.
+-- When converting from an invalid local time, the local time is
+-- interpreted as if the time change that made it invalid never
+-- happened.  When converting from a redundant local time, the latest
+-- possible interpretation is used. Use the functions
+-- 'isValidLocalTime' and 'isRedundantLocalTime' to detect these
+-- conditions.
 
 -- | Convert a UTC time to local time using the "TimeZone" that is in
 -- effect at that time in the timezone represented by TimeZoneSeries.
