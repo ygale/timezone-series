@@ -119,6 +119,15 @@ timeZoneFromSeries (TimeZoneSeries dfault changes) t = fromMaybe dfault .
 -- where multiple clock changes overlap with each other, even though
 -- as far as I know such weird cases have never actually occurred in
 -- any timezone. So far.
+--
+-- The theorem is that if G is the set of individual time changes
+-- for which t is invalid ("in the Gap"), and O is the set of
+-- individual time changes for which t is redundant ("in the Overlap"),
+-- then t is invalid for the full set of changes iff #G > #O, and
+-- t is redundant for the full set of changes iff #G < #O.
+-- A proof for this theorem, supplied by Aristid Breitkreuz,
+-- is available at:
+-- http://projects.haskell.org/time-ng/gaps_and_overlaps.html
 
 -- | When a clock change moves the clock forward, local times that
 -- are between the wall clock time before the change and the wall
@@ -132,14 +141,23 @@ isValidLocalTime tzs lt = gapsVsOverlaps tzs lt /= GT
 isRedundantLocalTime :: TimeZoneSeries -> LocalTime -> Bool
 isRedundantLocalTime tzs lt = gapsVsOverlaps tzs lt == LT
 
-gapsVsOverlaps (TimeZoneSeries d cs) lt = compareLengths gaps overlaps
+-- Compare the number of gaps to the number of overlaps in the
+-- timezone series for the given local time, as described above.
+gapsVsOverlaps :: TimeZoneSeries -> LocalTime -> Ordering
+gapsVsOverlaps tzs@(TimeZoneSeries d cs) lt = compareLengths gaps overlaps
   where
     (gaps, overlaps) = partition (uncurry (<)) relevantIntervals
     relevantIntervals = takeWhile notTooEarly . dropWhile tooLate $
-                        gapsAndOverlaps
+                        gapsAndOverlaps tzs
     tooLate (a, b) = a > lt && b > lt
     notTooEarly (a, b) = a > lt || b > lt
-    gapsAndOverlaps = zip
+
+-- Each pair (ltBefore, ltAfter) represents a time change
+-- where the clock is moved from ltBefore to ltAfter. If
+-- ltBefore < ltAfter the clock moves forward for that clock
+-- change, and otherwise backward.
+gapsAndOverlaps :: TimeZoneSeries -> [(LocalTime, LocalTime)]
+gapsAndOverlaps (TimeZoneSeries d cs) = zip
       (zipWith utcToLocalTime (map snd (drop 1 cs) ++ [d]) (map fst cs))
       (map (uncurry $ flip utcToLocalTime) cs)
 
