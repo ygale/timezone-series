@@ -1,19 +1,6 @@
------------------------------------------------------------------------------
--- |
--- Module      :  Data.Time.LocalTime.TimeZone.Series
--- Copyright   :  Yitzchak Gale 2010
---
--- Maintainer  :  Yitzchak Gale <gale@sefer.org>
--- Portability :  portable
---
--- A @TimeZoneSeries@ describes a timezone by specifying the various
+-- | A @TimeZoneSeries@ describes a timezone by specifying the various
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
-
-{- Copyright (c) 2010 Yitzchak Gale. All rights reserved.
-For licensing information, see the BSD3-style license in the file
-LICENSE that was originally distributed by the author together with
-this file. -}
 
 module Data.Time.LocalTime.TimeZone.Series
 (
@@ -45,7 +32,7 @@ import Data.Time (UTCTime, LocalTime, TimeZone(timeZoneSummerOnly),
                   utcToLocalTime, localTimeToUTC)
 import Data.List (partition)
 import Data.Maybe (listToMaybe, fromMaybe)
-import Data.Typeable (mkTyCon, mkTyConApp, Typeable(typeOf))
+import Data.Typeable (Typeable)
 import Control.Arrow (first)
 
 -- $abouttzs
@@ -81,11 +68,7 @@ data TimeZoneSeries =
                              -- change of clocks and the new timezone
                              -- state after the change
     }
-  deriving (Eq, Ord)
-
-instance Typeable TimeZoneSeries where
-  typeOf _ = mkTyConApp
-    (mkTyCon "Data.Time.LocalTime.TimeZone.Series") []
+  deriving (Eq, Ord, Typeable)
 
 instance Show TimeZoneSeries where
   show = show . latestNonSummer
@@ -174,11 +157,7 @@ data ZoneSeriesTime = ZoneSeriesTime {
        zoneSeriesTimeToUTC :: UTCTime,
        zoneSeriesTimeSeries :: TimeZoneSeries
     }
-  deriving (Eq, Ord)
-
-instance Typeable ZoneSeriesTime where
-  typeOf _ = mkTyConApp
-    (mkTyCon "Data.Time.LocalTime.TimeZone.ZoneSeriesTime") []
+  deriving (Eq, Ord, Typeable)
 
 instance Show ZoneSeriesTime where
   show tzs = show $ ZonedTime (zoneSeriesTimeToLocalTime tzs)
