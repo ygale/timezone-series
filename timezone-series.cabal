@@ -10,7 +10,7 @@ Homepage:            http://projects.haskell.org/time-ng/
 License:             BSD3
 License-file:        LICENSE
 Author:              Yitzchak Gale
-Maintainer:          yitz@community.haskell.org
+Maintainer:          yitz@sefer.org
 Copyright:           Copyright (c) 2010-2014 Yitzchak Gale. All rights reserved.
 Category:            Data
 Build-type:          Simple
