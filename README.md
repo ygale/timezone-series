@@ -1,4 +1,6 @@
-timezone-series version 0.1.0
+= timezone-series =
+
+On Hackage: [timezone-series](http://hackage.haskell.org/package/timezone-series)
 
 This package endows Data.Time, from the time package, with several
 additional data types for enhanced processing of timezones.
@@ -34,29 +36,16 @@ other systems, this information is typically provided in the form of
 Olson timezone files: /etc/localtime (or some other file) for the
 local timezone, and files located in /usr/share/zoneinfo/ or
 /etc/zoneinfo/ (or some other directory) for other timezones.
-See the timezone-olson package for more information about reading
-and creating Olson timezone files.
+See the timezone-olson timezone-olson-th packages for more information
+about reading and creating Olson timezone files.
 
-This version of timezone-series is highly experimental.  Expect there
-to be bugs, and do not rely on any stability of the exposed
-interfaces.
+http://hackage.haskell.org/package/timezone-olson
+http://hackage.haskell.org/package/timezone-olson-th
 
-Copyright (c) 2010 Yitzchak Gale. All rights reserved.
+Copyright (c) 2010-2015 Yitzchak Gale. All rights reserved.
+
 For licensing information, see the BSD3-style license in the file
 LICENSE that was originally distributed by the author together with
 this file.
 
-This package is part of the time-ng project:
-http://projects.haskell.org/time-ng/
-
-Send suggestions, bug reports, and patches to:
-yitz@community.haskell.org
-
-INSTALLATION:
-
-To install the latest version of this package, make sure that
-cabal-install is installed on your system (it is if you have installed
-the Haskell Platform) and type the commands:
-
-cabal update
-cabal install timezone-series
+This package is part of the [time-ng project](http://projects.haskell.org/time-ng/).
