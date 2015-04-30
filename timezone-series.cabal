@@ -5,9 +5,9 @@ Description:         This package endows Data.Time, from the time
                      package, with several data types and functions
                      for enhanced processing of timezones. For one way
                      to create timezone series, see the timezone-olson
-                     (http://hackage.haskell.org/package/timezone-olson)
+                     (<http://hackage.haskell.org/package/timezone-olson>)
                      and timezone-olson-th
-                     (http://hackage.haskell.org/package/timezone-olson-th)
+                     (<http://hackage.haskell.org/package/timezone-olson-th>)
                      packages.
 Homepage:            http://projects.haskell.org/time-ng/
 License:             BSD3
