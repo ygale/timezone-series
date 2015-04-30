@@ -1,5 +1,5 @@
 Name:                timezone-series
-Version:             0.1.4
+Version:             0.1.5
 Synopsis:            Enhanced timezone handling for Data.Time
 Description:         This package endows Data.Time, from the time
                      package, with several data types and functions
