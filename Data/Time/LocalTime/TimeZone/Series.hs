@@ -2,6 +2,7 @@
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
 
+{-# LANGUAGE CPP #-}
 module Data.Time.LocalTime.TimeZone.Series
 (
   -- * Representing a timezone
@@ -76,8 +77,18 @@ instance Show TimeZoneSeries where
 instance Read TimeZoneSeries where
     readsPrec n = map (first $ flip TimeZoneSeries []) . readsPrec n
 
+-- In time-1.6, buildTime was changed to return a `Maybe t` rather
+-- than just a `t`
+#if MIN_VERSION_time(1,6,0)
+mapBuiltTime :: (a -> b) -> Maybe a -> Maybe b
+mapBuiltTime = fmap
+#else
+mapBuiltTime :: (a -> b) -> a -> b
+mapBuiltTime = id
+#endif
+
 instance ParseTime TimeZoneSeries where
-  buildTime locale = flip TimeZoneSeries [] . buildTime locale
+  buildTime locale = mapBuiltTime (flip TimeZoneSeries []) . buildTime locale
 
 -- | The latest non-summer @TimeZone@ in a @TimeZoneSeries@ is in some
 -- sense representative of the timezone.
@@ -167,7 +178,7 @@ instance Read ZoneSeriesTime where
     readsPrec n = map (first zonedTimeToZoneSeriesTime) . readsPrec n
 
 instance ParseTime ZoneSeriesTime where
-  buildTime locale = zonedTimeToZoneSeriesTime . buildTime locale
+  buildTime locale = mapBuiltTime zonedTimeToZoneSeriesTime . buildTime locale
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
