@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 -- | A @TimeZoneSeries@ describes a timezone by specifying the various
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
@@ -77,7 +78,11 @@ instance Read TimeZoneSeries where
     readsPrec n = map (first $ flip TimeZoneSeries []) . readsPrec n
 
 instance ParseTime TimeZoneSeries where
+#if MIN_VERSION_time(1,6,0)
+  buildTime locale = fmap (flip TimeZoneSeries []) . buildTime locale
+#else
   buildTime locale = flip TimeZoneSeries [] . buildTime locale
+#endif
 
 -- | The latest non-summer @TimeZone@ in a @TimeZoneSeries@ is in some
 -- sense representative of the timezone.
@@ -167,7 +172,11 @@ instance Read ZoneSeriesTime where
     readsPrec n = map (first zonedTimeToZoneSeriesTime) . readsPrec n
 
 instance ParseTime ZoneSeriesTime where
+#if MIN_VERSION_time(1,6,0)
+  buildTime locale = fmap zonedTimeToZoneSeriesTime . buildTime locale
+#else
   buildTime locale = zonedTimeToZoneSeriesTime . buildTime locale
+#endif
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
