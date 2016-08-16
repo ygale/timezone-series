@@ -77,7 +77,7 @@ instance Read TimeZoneSeries where
     readsPrec n = map (first $ flip TimeZoneSeries []) . readsPrec n
 
 instance ParseTime TimeZoneSeries where
-  buildTime locale = flip TimeZoneSeries [] . buildTime locale
+  buildTime locale = fmap (flip TimeZoneSeries []) . buildTime locale
 
 -- | The latest non-summer @TimeZone@ in a @TimeZoneSeries@ is in some
 -- sense representative of the timezone.
@@ -167,7 +167,7 @@ instance Read ZoneSeriesTime where
     readsPrec n = map (first zonedTimeToZoneSeriesTime) . readsPrec n
 
 instance ParseTime ZoneSeriesTime where
-  buildTime locale = zonedTimeToZoneSeriesTime . buildTime locale
+  buildTime locale = fmap zonedTimeToZoneSeriesTime . buildTime locale
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
