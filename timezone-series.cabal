@@ -28,4 +28,4 @@ Library
   Exposed-modules:     Data.Time.LocalTime.TimeZone.Series
   Default-extensions:  DeriveDataTypeable
   Build-depends:       base >= 4.4 && < 5,
-                       time >= 1.1.4 && < 1.6
+                       time >= 1.6 && < 1.7
