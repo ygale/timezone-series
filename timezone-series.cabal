@@ -23,9 +23,22 @@ Source-repository HEAD
   type:              git
   location:          https://github.com/ygale/timezone-series.git
 
+Flag time_pre_1_6
+  Description:       Use version < 1.6 of the time library
+  Default:           False
+
 Library
   Default-language:    Haskell2010
+  Hs-source-dirs:      .
+  if flag(time_pre_1_6)
+    Hs-source-dirs:    time_pre_1_6
+  else
+    Hs-source-dirs:    time_post_1_6
   Exposed-modules:     Data.Time.LocalTime.TimeZone.Series
+  Other-modules:       Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime
   Default-extensions:  DeriveDataTypeable
-  Build-depends:       base >= 4.4 && < 5,
-                       time >= 1.1.4 && < 1.6
+  Build-depends:       base >= 4.4 && < 5
+  if flag(time_pre_1_6)
+    Build-depends:     time >= 1.1.4 && < 1.6
+  else
+    Build-depends:     time >= 1.6 && < 1.7

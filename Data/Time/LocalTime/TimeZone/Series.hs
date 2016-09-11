@@ -35,6 +35,10 @@ import Data.Maybe (listToMaybe, fromMaybe)
 import Data.Typeable (Typeable)
 import Control.Arrow (first)
 
+-- Conditional import, depending on whether time library is pre-1.6 or
+-- post-1.6, controlled by cabal flag:
+import Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime (mapBuiltTime)
+
 -- $abouttzs
 -- A @TimeZoneSeries@ describes a timezone with a set of 'TimeZone'
 -- objects. Each @TimeZone@ object describes the clock setting in the
@@ -77,7 +81,7 @@ instance Read TimeZoneSeries where
     readsPrec n = map (first $ flip TimeZoneSeries []) . readsPrec n
 
 instance ParseTime TimeZoneSeries where
-  buildTime locale = flip TimeZoneSeries [] . buildTime locale
+  buildTime locale = mapBuiltTime (flip TimeZoneSeries []) . buildTime locale
 
 -- | The latest non-summer @TimeZone@ in a @TimeZoneSeries@ is in some
 -- sense representative of the timezone.
