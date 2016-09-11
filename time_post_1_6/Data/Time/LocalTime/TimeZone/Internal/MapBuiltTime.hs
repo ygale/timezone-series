@@ -7,5 +7,5 @@ module Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime
 where
 
 -- | Map over 'Maybe' for 'buildTime' for post-1.6 time library.
-mapBuiltTime :: Functor f :: (a -> b) -> f a -> f b
+mapBuiltTime :: Functor f => (a -> b) -> f a -> f b
 mapBuiltTime = fmap

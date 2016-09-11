@@ -171,7 +171,7 @@ instance Read ZoneSeriesTime where
     readsPrec n = map (first zonedTimeToZoneSeriesTime) . readsPrec n
 
 instance ParseTime ZoneSeriesTime where
-  buildTime locale = zonedTimeToZoneSeriesTime . buildTime locale
+  buildTime locale = mapBuiltTime zonedTimeToZoneSeriesTime . buildTime locale
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
