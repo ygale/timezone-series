@@ -40,6 +40,7 @@ Library
   Other-modules:       Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime
   Default-extensions:  DeriveDataTypeable
   Build-depends:       base >= 4.4 && < 5
+                     , deepseq
   if flag(time_pre_1_6)
     Build-depends:     time >= 1.1.4 && < 1.6
   else
