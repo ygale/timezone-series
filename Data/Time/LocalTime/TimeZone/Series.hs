@@ -1,6 +1,7 @@
 -- | A @TimeZoneSeries@ describes a timezone by specifying the various
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
+{-# LANGUAGE CPP #-}
 
 module Data.Time.LocalTime.TimeZone.Series
 (
@@ -93,7 +94,11 @@ latestNonSummer (TimeZoneSeries d cs) = fromMaybe d . listToMaybe $
 
 instance FormatTime TimeZoneSeries where
   formatCharacter = 
+#if MIN_VERSION_time(1,8,0)
+    fmap (\f locale mpado mwidth -> f locale mpado mwidth . latestNonSummer) .
+#else
     fmap (\f locale mpado -> f locale mpado . latestNonSummer) .
+#endif
     formatCharacter
 
 -- | Given a timezone represented by a @TimeZoneSeries@, and a @UTCTime@,
@@ -175,7 +180,11 @@ instance ParseTime ZoneSeriesTime where
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
+#if MIN_VERSION_time(1,8,0)
+    fmap (\f locale mpado mwidth -> f locale mpado mwidth . zoneSeriesTimeToZonedTime) .
+#else
     fmap (\f locale mpado -> f locale mpado . zoneSeriesTimeToZonedTime) .
+#endif
     formatCharacter
 
 -- | The @ZonedTime@ of a @ZoneSeriesTime@.
