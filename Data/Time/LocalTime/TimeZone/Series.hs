@@ -36,9 +36,10 @@ import Data.Typeable (Typeable)
 import Control.Arrow (first)
 import Control.DeepSeq (NFData(..))
 
--- Conditional import, depending on whether time library is pre-1.6 or
--- post-1.6, controlled by cabal flag:
-import Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime (mapBuiltTime)
+-- Conditional import, depending on the version of the time library,
+-- controlled by cabal flag:
+import Data.Time.LocalTime.TimeZone.Internal.TimeVersion (mapBuiltTime,
+  mapFormatCharacter)
 
 -- $abouttzs
 -- A @TimeZoneSeries@ describes a timezone with a set of 'TimeZone'
@@ -97,7 +98,7 @@ latestNonSummer (TimeZoneSeries d cs) = fromMaybe d . listToMaybe $
 
 instance FormatTime TimeZoneSeries where
   formatCharacter = 
-    fmap (\f locale mpado -> f locale mpado . latestNonSummer) .
+    fmap (mapFormatCharacter latestNonSummer) .
     formatCharacter
 
 -- | Given a timezone represented by a @TimeZoneSeries@, and a @UTCTime@,
@@ -179,7 +180,7 @@ instance ParseTime ZoneSeriesTime where
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
-    fmap (\f locale mpado -> f locale mpado . zoneSeriesTimeToZonedTime) .
+    fmap (mapFormatCharacter zoneSeriesTimeToZonedTime) .
     formatCharacter
 
 -- | The @ZonedTime@ of a @ZoneSeriesTime@.

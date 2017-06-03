@@ -1,5 +1,5 @@
 Name:                timezone-series
-Version:             0.1.6.1
+Version:             0.1.8
 Synopsis:            Enhanced timezone handling for Data.Time
 Description:         This package endows Data.Time, from the time
                      package, with several data types and functions
@@ -29,19 +29,29 @@ Flag time_pre_1_6
   Description:       Use version < 1.6 of the time library
   Default:           False
 
+Flag time_1_6_and_1_7
+  Description:       Use version >= 1.6 and < 1.8 of the time library
+  Default:           False
+
 Library
   Default-language:    Haskell2010
   Hs-source-dirs:      .
   if flag(time_pre_1_6)
     Hs-source-dirs:    time_pre_1_6
   else
-    Hs-source-dirs:    time_post_1_6
+    if flag(time_1_6_and_1_7)
+      Hs-source-dirs:  time_1_6_and_1_7
+    else
+      Hs-source-dirs:  time_post_1_8
   Exposed-modules:     Data.Time.LocalTime.TimeZone.Series
-  Other-modules:       Data.Time.LocalTime.TimeZone.Internal.MapBuiltTime
+  Other-modules:       Data.Time.LocalTime.TimeZone.Internal.TimeVersion
   Default-extensions:  DeriveDataTypeable
   Build-depends:       base >= 4.4 && < 5
                      , deepseq
   if flag(time_pre_1_6)
     Build-depends:     time >= 1.1.4 && < 1.6
   else
-    Build-depends:     time >= 1.6 && < 1.7
+    if flag(time_1_6_and_1_7)
+      Build-depends:   time >= 1.6 && < 1.8
+    else
+      Build-depends:   time >= 1.8 && < 1.9
