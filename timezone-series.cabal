@@ -44,4 +44,4 @@ Library
   if flag(time_pre_1_6)
     Build-depends:     time >= 1.1.4 && < 1.6
   else
-    Build-depends:     time >= 1.6 && < 1.7
+    Build-depends:     time >= 1.6 && < 1.9
