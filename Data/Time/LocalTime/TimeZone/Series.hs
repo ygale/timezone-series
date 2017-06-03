@@ -34,6 +34,7 @@ import Data.List (partition)
 import Data.Maybe (listToMaybe, fromMaybe)
 import Data.Typeable (Typeable)
 import Control.Arrow (first)
+import Control.DeepSeq (NFData(..))
 
 -- Conditional import, depending on whether time library is pre-1.6 or
 -- post-1.6, controlled by cabal flag:
@@ -79,6 +80,9 @@ instance Show TimeZoneSeries where
 
 instance Read TimeZoneSeries where
     readsPrec n = map (first $ flip TimeZoneSeries []) . readsPrec n
+
+instance NFData TimeZoneSeries where
+  rnf tzs = rnf (tzsTimeZone tzs, tzsTransitions tzs)
 
 instance ParseTime TimeZoneSeries where
   buildTime locale = mapBuiltTime (flip TimeZoneSeries []) . buildTime locale
