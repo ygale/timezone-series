@@ -43,7 +43,7 @@ and
 packages for more information about reading and creating Olson
 timezone files.
 
-Copyright (c) 2010-2016 Yitzchak Gale. All rights reserved.
+Copyright (c) 2010-2017 Yitzchak Gale. All rights reserved.
 
 For licensing information, see the BSD3-style license in the file
 LICENSE that was originally distributed by the author together with
