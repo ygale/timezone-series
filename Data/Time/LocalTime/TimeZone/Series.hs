@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 -- | A @TimeZoneSeries@ describes a timezone by specifying the various
 -- clock settings that occurred in the past and are scheduled to occur
 -- in the future for the timezone.
@@ -28,8 +30,12 @@ where
 
 import Data.Time (UTCTime, LocalTime, TimeZone(timeZoneSummerOnly),
                   ZonedTime(ZonedTime),
-                  ParseTime(buildTime), FormatTime(formatCharacter),
                   utcToLocalTime, localTimeToUTC)
+#if MIN_VERSION_time(1,9,1)
+import Data.Time.Format.Internal (FormatTime(formatCharacter), ParseTime(buildTime))
+#else
+import Data.Time (FormatTime(formatCharacter), ParseTime(buildTime))
+#endif
 import Data.List (partition)
 import Data.Maybe (listToMaybe, fromMaybe)
 import Data.Typeable (Typeable)
@@ -97,7 +103,7 @@ latestNonSummer (TimeZoneSeries d cs) = fromMaybe d . listToMaybe $
     tzs = map snd cs
 
 instance FormatTime TimeZoneSeries where
-  formatCharacter = 
+  formatCharacter =
     fmap (mapFormatCharacter latestNonSummer) .
     formatCharacter
 
