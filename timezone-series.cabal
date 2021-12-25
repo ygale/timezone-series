@@ -29,8 +29,7 @@ Library
   Default-language:    Haskell2010
   Hs-source-dirs:      .
   Exposed-modules:     Data.Time.LocalTime.TimeZone.Series
-  Other-modules:       Data.Time.LocalTime.TimeZone.Internal.TimeVersion
   Default-extensions:  DeriveDataTypeable
   Build-depends:       base >= 4.4 && < 5
                      , deepseq
-                     , time (>= 1.1.4 && < 1.9) || (>= 1.9.1 && < 1.10)
+                     , time (>= 1.1.4 && < 1.9) || (>= 1.9.1 && < 1.13)

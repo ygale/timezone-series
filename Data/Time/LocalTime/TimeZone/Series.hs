@@ -32,20 +32,22 @@ import Data.Time (UTCTime, LocalTime, TimeZone(timeZoneSummerOnly),
                   ZonedTime(ZonedTime),
                   utcToLocalTime, localTimeToUTC)
 #if MIN_VERSION_time(1,9,1)
-import Data.Time.Format.Internal (FormatTime(formatCharacter), ParseTime(buildTime))
+import Data.Time.Format.Internal
+  ( FormatTime(formatCharacter)
+  , ParseTime( buildTime
+             , parseTimeSpecifier
+             , substituteTimeSpecifier
+             )
+  )
 #else
 import Data.Time (FormatTime(formatCharacter), ParseTime(buildTime))
 #endif
 import Data.List (partition)
 import Data.Maybe (listToMaybe, fromMaybe)
+import Data.Proxy (Proxy(Proxy))
 import Data.Typeable (Typeable)
 import Control.Arrow (first)
 import Control.DeepSeq (NFData(..))
-
--- Conditional import, depending on the version of the time library,
--- controlled by cabal flag:
-import Data.Time.LocalTime.TimeZone.Internal.TimeVersion (mapBuiltTime,
-  mapFormatCharacter)
 
 -- $abouttzs
 -- A @TimeZoneSeries@ describes a timezone with a set of 'TimeZone'
@@ -93,6 +95,19 @@ instance NFData TimeZoneSeries where
 
 instance ParseTime TimeZoneSeries where
   buildTime locale = mapBuiltTime (flip TimeZoneSeries []) . buildTime locale
+#if MIN_VERSION_time(1,9,1)
+  parseTimeSpecifier _ = parseTimeSpecifier (Proxy :: Proxy TimeZone)
+  substituteTimeSpecifier _ =
+    substituteTimeSpecifier (Proxy :: Proxy TimeZone)
+#endif
+
+#if MIN_VERSION_time(1,6,0)
+mapBuiltTime :: Functor f => (a -> b) -> f a -> f b
+mapBuiltTime = fmap
+#else
+mapBuiltTime :: a -> a
+mapBuiltTime = id
+#endif
 
 -- | The latest non-summer @TimeZone@ in a @TimeZoneSeries@ is in some
 -- sense representative of the timezone.
@@ -106,6 +121,19 @@ instance FormatTime TimeZoneSeries where
   formatCharacter =
     fmap (mapFormatCharacter latestNonSummer) .
     formatCharacter
+
+#if MIN_VERSION_time(1,9,1)
+mapFormatCharacter ::
+  (a -> b) -> Maybe (x -> b -> String) -> Maybe (x -> a -> String)
+mapFormatCharacter f = fmap (\g x -> g x . f)
+#elif MIN_VERSION_time(1,8,0)
+mapFormatCharacter ::
+  (a -> b) -> (c -> d -> e -> b -> z) -> c -> d -> e -> a -> z
+mapFormatCharacter f g locale mpado mwidth = g locale mpado mwidth . f
+#else
+mapFormatCharacter :: (a -> b) -> (c -> d -> b -> z) -> c -> d -> a -> z
+mapFormatCharacter f g locale mpado = g locale mpado . f
+#endif
 
 -- | Given a timezone represented by a @TimeZoneSeries@, and a @UTCTime@,
 -- provide the state of the timezone's clocks at that time.
@@ -183,6 +211,11 @@ instance Read ZoneSeriesTime where
 
 instance ParseTime ZoneSeriesTime where
   buildTime locale = mapBuiltTime zonedTimeToZoneSeriesTime . buildTime locale
+#if MIN_VERSION_time(1,9,1)
+  parseTimeSpecifier _ = parseTimeSpecifier (Proxy :: Proxy ZonedTime)
+  substituteTimeSpecifier _ =
+    substituteTimeSpecifier (Proxy :: Proxy ZonedTime)
+#endif
 
 instance FormatTime ZoneSeriesTime where
   formatCharacter =
